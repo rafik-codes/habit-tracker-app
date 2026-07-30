@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "Habit Tracker App",
+    "slug": "habit-tracker-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "extra": {
+      "eas": {
+        "projectId": "0f8f2c96-eb67-433b-a127-ba130f409726"
+      }
+    },
+    "android": {
+      "package": "com.rafik.dev.habittrackerapp",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": ["NOTIFICATIONS", "VIBRATE"]
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.rafik.dev.habittrackerapp"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-font",
+      "expo-splash-screen",
+      "expo-localization"
+    ],
+    "owner": "rafik-dev"
+  }
+}
