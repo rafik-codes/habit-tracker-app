@@ -21,15 +21,14 @@ const saveHabitToFirebase = async (habitTitle) => {
 };
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBjFGul_jBe69mfVs45JyLduDxWqpfwHdg",
-  authDomain: "habitapp-rafik.firebaseapp.com",
-  projectId: "habitapp-rafik",
-  storageBucket: "habitapp-rafik.firebasestorage.app",
-  messagingSenderId: "401567783314",
-  appId: "1:401567783314:web:39972d1d63e3761d06494b",
-  measurementId: "G-XHBVJ1DF4N",
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
+  measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
-
 // Initialize Firebase
 const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 const analytics = getAnalytics(app);
