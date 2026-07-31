@@ -1,6 +1,7 @@
 
 { pkgs }: {
   deps = [
+    pkgs.fnm
     pkgs.glib
     pkgs.nspr
     pkgs.nss
