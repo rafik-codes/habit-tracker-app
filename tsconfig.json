@@ -4,10 +4,16 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "strict": true,
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "types": ["react", "react-native"],
     "paths": {
       "@/*": ["./*"]
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
+  "exclude": ["drizzle.config.ts", "orval.config.ts", "index.ts"],
   "references": []
 }

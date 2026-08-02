@@ -1,13 +1,14 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { db } from "./firebase";
+import { db as firebaseDb, isFirebaseConfigured } from "./firebase";
 import {
   collection,
   getDocs,
   addDoc,
   deleteDoc,
   doc,
-  updateDoc,
+  type Firestore,
 } from "firebase/firestore";
+import { loadHabits, saveHabits } from "./storageService";
 
 // تحديد هيكل البيانات للعادة
 export interface Habit {
@@ -33,36 +34,57 @@ const HabitsContext = createContext<HabitsContextType | undefined>(undefined);
 export const HabitsProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
+  const db = firebaseDb as unknown as Firestore | null;
   const [habits, setHabits] = useState<Habit[]>([]);
 
   // 1. جلب العادات من Firestore عند تحميل الصفحة
   const fetchHabits = async () => {
+    const storedHabits = await loadHabits();
+    if (storedHabits.length) {
+      setHabits(storedHabits);
+    }
+
+    if (!db || !isFirebaseConfigured) {
+      return;
+    }
+
     try {
-      const querySnapshot = await getDocs(collection(db, "habits"));
+      const firestoreDb = db as Firestore;
+      const querySnapshot = await getDocs(collection(firestoreDb, "habits"));
       const loadedHabits: Habit[] = querySnapshot.docs.map((doc) => ({
         id: doc.id,
         ...(doc.data() as Omit<Habit, "id">),
       }));
       setHabits(loadedHabits);
+      await saveHabits(loadedHabits);
     } catch (error) {
       console.error("Error fetching habits: ", error);
     }
   };
 
   useEffect(() => {
-    fetchHabits();
+    void fetchHabits();
   }, []);
 
   // 2. إضافة عادة جديدة إلى قاعدة البيانات
   const addHabit = async (name: string) => {
+    const newHabit = {
+      name,
+      createdAt: new Date().toISOString(),
+      completedDates: [],
+    };
+
+    setHabits((prev) => [...prev, { id: `local-${Date.now()}`, ...newHabit }]);
+    await saveHabits(habits);
+
+    if (!db || !isFirebaseConfigured) {
+      return;
+    }
+
     try {
-      const newHabit = {
-        name,
-        createdAt: new Date().toISOString(),
-        completedDates: [],
-      };
-      const docRef = await addDoc(collection(db, "habits"), newHabit);
-      setHabits((prev) => [...prev, { id: docRef.id, ...newHabit }]);
+      const firestoreDb = db as Firestore;
+      const docRef = await addDoc(collection(firestoreDb, "habits"), newHabit);
+      setHabits((prev) => [...prev.filter((habit) => !habit.id.startsWith("local-")), { id: docRef.id, ...newHabit }]);
     } catch (error) {
       console.error("Error adding habit: ", error);
     }
@@ -70,9 +92,16 @@ export const HabitsProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // 3. حذف عادة من قاعدة البيانات
   const deleteHabit = async (id: string) => {
+    setHabits((prev) => prev.filter((habit) => habit.id !== id));
+    await saveHabits(habits.filter((habit) => habit.id !== id));
+
+    if (!db || !isFirebaseConfigured) {
+      return;
+    }
+
     try {
-      await deleteDoc(doc(db, "habits", id));
-      setHabits((prev) => prev.filter((habit) => habit.id !== id));
+      const firestoreDb = db as Firestore;
+      await deleteDoc(doc(firestoreDb, "habits", id));
     } catch (error) {
       console.error("Error deleting habit: ", error);
     }
