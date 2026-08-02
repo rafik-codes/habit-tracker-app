@@ -7,7 +7,7 @@ import {
   doc,
   updateDoc,
 } from "firebase/firestore";
-import { db } from "../lib/api-zod/src/firebase"; // تأكد من مطابقة مسار ملف الـ firebaseConfig حسب مجلدك
+import { db } from "./firebase";
 
 export interface Habit {
   id: string;

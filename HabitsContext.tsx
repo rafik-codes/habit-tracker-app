@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
-import { db } from "../lib/api-zod/src/firebase";
+import { db } from "./firebase";
 import {
   collection,
   getDocs,

@@ -9,9 +9,5 @@
     }
   },
   "include": ["**/*.ts", "**/*.tsx"],
-  "references": [
-    {
-      "path": "./lib/api-client-react"
-    }
-  ]
+  "references": []
 }

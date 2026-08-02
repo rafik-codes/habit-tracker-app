@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { View, Text, StyleSheet, ScrollView } from "react-native";
-import { useHabits } from "../contexts/HabitsContext";
+import { useHabits } from "./HabitsContext";
 
 import { useColorScheme } from "react-native";
-import { Colors } from "../constants/colors";
+import { Colors } from "./colors";
 
 // داخل دالة الشاشة:
 const colorScheme = useColorScheme() ?? "light";

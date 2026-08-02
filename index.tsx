@@ -7,12 +7,12 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { useHabits } from "../hooks/useHabits";
+import { useHabits } from "./useHabits";
 import * as Haptics from "expo-haptics";
 import i18n from "./i18n";
-import { calculateHabitStats } from "../lib/api-client-react/src/statsService";
-import { calculateStreak } from "../lib/api-client-react/src/streakService";
-import { scheduleDailyReminder } from "../contexts/notificationService";
+import { calculateHabitStats } from "./statsService";
+import { calculateStreak } from "./streakService";
+import { scheduleDailyReminder } from "./notificationService";
 export default function App() {
   const [text, setText] = useState("");
   const { habits, addHabit, deleteHabit, toggleHabit } = useHabits();
