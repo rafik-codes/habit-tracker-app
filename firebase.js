@@ -1,36 +1,36 @@
-// @ts-nocheck
+// Import the functions you need from the SDKs you need
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth"; // أداة تسجيل الدخول والمصادقة
 
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY || "",
-  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN || "",
-  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID || "",
-  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET || "",
-  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "",
-  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID || "",
-  measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID || "",
+  apiKey: "AIzaSyBjFGul_jBe69mfVs45JyLduDxWqpfwHdg",
+  authDomain: "habitapp-rafik.firebaseapp.com",
+  projectId: "habitapp-rafik",
+  storageBucket: "habitapp-rafik.firebasestorage.app",
+  messagingSenderId: "401567783314",
+  appId: "1:401567783314:web:39972d1d63e3761d06494b",
 };
 
-const hasFirebaseConfig = Object.values(firebaseConfig).some(Boolean);
+// Initialize Firebase (Analytics غير مدعومة على React Native، فتم حذفها)
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
-let app = null;
-let db = null;
-let auth = null;
+// تصدير الأدوات لاستخدامها في شاشات التطبيق المختلفة
+export const db = getFirestore(app);
+export const auth = getAuth(app);
 
-if (hasFirebaseConfig) {
+export const saveHabitToFirebase = async (habitTitle) => {
   try {
-    app = getApps().length ? getApp() : initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    auth = getAuth(app);
-  } catch (error) {
-    console.warn("Firebase initialization skipped:", error);
+    await addDoc(collection(db, "habits"), {
+      title: habitTitle,
+      isCompleted: false,
+      createdAt: new Date(),
+    });
+    console.log("تمت المزامنة السحابية بنجاح! ☁️");
+  } catch (e) {
+    console.error("خطأ في الحفظ السحابي: ", e);
   }
-} else {
-  console.info("Firebase is not configured. The app will use local storage instead.");
-}
+};
 
-export { app, db, auth, firebaseConfig, hasFirebaseConfig };
-export const isFirebaseConfigured = Boolean(hasFirebaseConfig && app && db && auth);
 export default app;
