@@ -19,6 +19,7 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 // تصدير الأدوات لاستخدامها في شاشات التطبيق المختلفة
 export const db = getFirestore(app);
 export const auth = getAuth(app);
+export const isFirebaseConfigured = true;
 
 export const saveHabitToFirebase = async (habitTitle) => {
   try {
