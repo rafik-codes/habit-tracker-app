@@ -26,11 +26,10 @@
     "web": {
       "bundler": "metro"
     },
+    "scheme": "habittrackerapp",
     "plugins": [
+      "expo-router",
       "expo-status-bar",
-      "expo-font",
-      "expo-splash-screen",
-      "expo-localization"
     ],
     "owner": "rafik-dev"
   }
